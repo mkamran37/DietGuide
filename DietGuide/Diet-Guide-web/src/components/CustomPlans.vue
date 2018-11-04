@@ -1,13 +1,13 @@
   <template>
    <div>
     <el-carousel :autoplay="false" type="card" height="650px">
-      <el-carousel-item v-for="recommendation in propsObj.response" :key="recommendation.name">
+      <el-carousel-item v-for="recommendation in propsObj.response" :key="propsObj.response.indexOf(recommendation)">
           <el-card>
               <div class="product-card">
               <h1>Recommendation Set {{propsObj.response.indexOf(recommendation) + 1}}</h1>
               <el-popover
-                v-for="product in recommendation.productsList" :key="product.productName"
-                v-if="!!product.productName"
+                v-for="product in recommendation.productsList" :key="product.sku"
+                v-if="!isDuplicate(product)"
                 placement="right"
                 width="400"
                 trigger="click">
@@ -36,6 +36,7 @@
     data() {
         return {
             products: [],
+            duplicateProducts: new Set(),
         }
     },
     props: {
@@ -49,6 +50,16 @@
       }
     },
     methods: {
+        isDuplicate(product) {
+            if (!product.hasOwnProperty("productName")){
+                return true;
+            }
+            if (!this.duplicateProducts.has(product.sku)){
+                this.duplicateProducts.add(product.sku);
+                return false;
+            } 
+            return true;
+        },
         search(recommendation){
             this.products = recommendation.productsList.map(element => {
                 return {

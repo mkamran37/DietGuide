@@ -49,7 +49,7 @@
         <div v-show="currentPage===5">
           <h3>My food preferences are {{plan.foodCategories.join(', ')}}</h3>
           <el-checkbox-group v-model="plan.foodCategories">
-            <el-checkbox v-for="allergy in foodAllergies" :label="allergy" :key="allergy"/>
+            <el-checkbox v-for="category in foodCategories" :label="category" :key="category"/>
           </el-checkbox-group>
         </div>
         </transition>
